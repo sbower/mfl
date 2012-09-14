@@ -18,6 +18,8 @@ module Mfl
     attr_accessor :standingsSort
     attr_accessor :salaryCapAmount
     attr_accessor :loadRosters
+    attr_accessor :starters_count
+    attr_accessor :starters
     attr_accessor :division_count
     attr_accessor :divisions
     attr_accessor :franchise_count
@@ -29,6 +31,7 @@ module Mfl
     end
     
     def setLeague(xmldata)
+       @starters = Array.new
        @divisions = Array.new
        @franchises = Array.new
        @history = Array.new
@@ -54,6 +57,13 @@ module Mfl
         @salaryCapAmount = parseddata['salaryCapAmount'] if !parseddata['salaryCapAmount'].nil?
         @loadRosters = parseddata['loadRosters'] if !parseddata['loadRosters'].nil?
         
+        parseddata['starters'][0]['position'].each do |position|
+           position_hash = Hash.new
+           position_hash[:name] = position['name'] if !position['name'].nil?
+           position_hash[:limit] = position['limit'] if !position['limit'].nil?
+           @starters.push(position_hash)
+        end
+         
         @division_count = parseddata['divisions'][0]['count'] if !parseddata['divisions'][0]['count'].nil?
         parseddata['divisions'][0]['division'].each do |division|
            @divisions.push(Division.new(division))

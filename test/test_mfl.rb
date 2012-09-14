@@ -28,6 +28,9 @@ class TestMfl < Test::Unit::TestCase
     assert_equal "live_draft", league.loadRosters
     assert_equal "3", league.division_count
     
+    assert_equal "QB", league.starters[0][:name]
+    assert_equal "1", league.starters[0][:limit]
+    
     assert_equal "00", league.divisions[0].id
     assert_equal "Black", league.divisions[0].name
     
@@ -51,5 +54,42 @@ class TestMfl < Test::Unit::TestCase
     assert_equal "2012", league.history[0][:year]
     assert_equal "http://football19.myfantasyleague.com/2012/home/14564", league.history[0][:url]
       
+  end
+  
+  should "get rules" do
+    rules = @mfl.getRules()
+    
+    assert_equal "SF", rules.positionrules['Def'][0].event
+    assert_equal "0-10", rules.positionrules['Def'][0].range
+    assert_equal "*2", rules.positionrules['Def'][0].points
+    assert_nil rules.positionrules['Def'][0].threshold_points
+    
+    assert_equal "P2", rules.positionrules['QB|RB|WR|TE|PK'][1].event
+    assert_equal "1-99", rules.positionrules['QB|RB|WR|TE|PK'][1].range
+    assert_equal "*2", rules.positionrules['QB|RB|WR|TE|PK'][1].points
+    assert_nil rules.positionrules['Def'][0].threshold_points
+    
+    assert_equal "FL", rules.positionrules['QB|RB|WR|TE|PK'][9].event
+    assert_equal "1-10", rules.positionrules['QB|RB|WR|TE|PK'][9].range
+    assert_equal "-2/1", rules.positionrules['QB|RB|WR|TE|PK'][9].points
+    assert_equal "-2", rules.positionrules['QB|RB|WR|TE|PK'][9].threshold_points
+    
+  end
+  
+  should "get rosters" do
+    rosters = @mfl.getRosters()
+        
+    assert_equal "9099", rosters.franchises['0001'][0].id
+    assert_equal "ROSTER", rosters.franchises['0001'][0].status
+    assert_equal "rookie", rosters.franchises['0001'][0].contractStatus
+    assert_equal "2", rosters.franchises['0001'][0].contractYear
+    assert_equal "3.00", rosters.franchises['0001'][0].salary
+    
+    assert_equal "9078", rosters.franchises['0005'][2].id
+    assert_equal "ROSTER", rosters.franchises['0005'][2].status
+    assert_equal "rookie", rosters.franchises['0005'][2].contractStatus
+    assert_equal "4", rosters.franchises['0005'][2].contractYear
+    assert_equal "4.00", rosters.franchises['0005'][2].salary
+    
   end
 end

@@ -1,3 +1,7 @@
 require_local("Mfl/Responses/League")
 require_local("Mfl/Responses/Division")
 require_local("Mfl/Responses/Franchise")
+require_local("Mfl/Responses/Rules")
+require_local("Mfl/Responses/PositionRule")
+require_local("Mfl/Responses/Rosters")
+require_local("Mfl/Responses/RosterPlayer")
